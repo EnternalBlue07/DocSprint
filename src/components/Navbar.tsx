@@ -87,7 +87,7 @@ export default function Navbar({
   const specLabel = getActiveSpecLabel();
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-zinc-200/50 dark:border-zinc-800/50 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md transition-colors duration-300" id="navbar">
+    <header className="sticky top-0 z-50 w-full border-b border-[var(--border-hairline)] bg-[var(--bg-card)] backdrop-blur-md transition-colors duration-300" id="navbar">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8 gap-3">
 
         {/* Brand Logo */}
@@ -110,19 +110,19 @@ export default function Navbar({
           </div>
         </div>
 
-        {/* Active Profile Spec Pill (center, persistent on all breakpoints when inside studio) */}
+        {/* Active Profile Spec Pill */}
         <div className="flex-1 flex justify-center items-center px-2">
           {isStudioContext && (
             <div
               onClick={onToggleProfileSwitcher}
-              className="flex items-center gap-2 rounded-full border border-indigo-200/60 dark:border-indigo-800/60 bg-indigo-50/40 dark:bg-indigo-950/20 px-4 py-1.5 text-xs text-indigo-950 dark:text-indigo-200 font-semibold cursor-pointer hover:bg-indigo-100/50 dark:hover:bg-indigo-950/50 transition-all duration-300 hover:shadow-lg hover:shadow-indigo-500/5 hover:border-indigo-400/50 overflow-hidden max-w-xs md:max-w-md"
+              className="flex items-center gap-2 rounded-full border border-indigo-200 dark:border-indigo-800 bg-indigo-50/40 px-4 py-1.5 text-xs text-indigo-700 dark:text-indigo-200 font-semibold cursor-pointer hover:bg-indigo-100/50 transition-all duration-300 hover:shadow-lg hover:shadow-indigo-500/5 hover:border-indigo-400/50 overflow-hidden max-w-xs md:max-w-md"
               id="active-profile-pill"
             >
               <div className={`flex items-center gap-2 transition-opacity duration-150 ${isFading ? 'opacity-0' : 'opacity-100'}`}>
-                <Sparkles className="h-3.5 w-3.5 text-indigo-650 dark:text-indigo-400 animate-float" />
+                <Sparkles className="h-3.5 w-3.5 text-indigo-600 dark:text-indigo-400 animate-float" />
                 {activeProfile ? (
                   <div className="flex items-center gap-1.5">
-                    <span className="hidden md:inline text-zinc-450 font-normal">Profile:</span>
+                    <span className="hidden md:inline text-zinc-500 font-normal">Profile:</span>
                     <strong className="font-extrabold text-zinc-900 dark:text-white">{activeProfile.name}</strong>
                     {specLabel && (
                       <span className="text-[10px] font-extrabold font-mono px-2 py-0.5 bg-indigo-100/70 dark:bg-indigo-900/60 rounded text-indigo-700 dark:text-indigo-300">
@@ -133,7 +133,7 @@ export default function Navbar({
                 ) : (
                   <span className="font-extrabold text-zinc-900 dark:text-white">Custom Mode (No Rules Profile)</span>
                 )}
-                <ChevronDown className="h-3.5 w-3.5 text-zinc-450" />
+                <ChevronDown className="h-3.5 w-3.5 text-zinc-500" />
               </div>
             </div>
           )}
@@ -144,7 +144,7 @@ export default function Navbar({
           {/* Theme Toggle Button */}
           <button
             onClick={onToggleDarkMode}
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:border-indigo-400/50 text-zinc-500 dark:text-zinc-400 transition-all duration-300 cursor-pointer hover:shadow-sm"
+            className="flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-200 bg-zinc-100/50 hover:bg-zinc-200/70 hover:border-indigo-500/50 text-zinc-500 hover:text-indigo-650 transition-all duration-300 cursor-pointer hover:shadow-sm"
             title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
             id="theme-toggle-btn"
           >
@@ -155,13 +155,13 @@ export default function Navbar({
           <div
             className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-mono font-bold shadow-2xs transition-all duration-300 ${
               isLowTime
-                ? 'border-rose-200 bg-rose-50/80 text-rose-700 dark:border-rose-800/80 dark:bg-rose-950/20 dark:text-rose-400 animate-pulse'
-                : 'border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 text-zinc-700 dark:text-zinc-300'
+                ? 'border-rose-200 bg-rose-50/80 text-rose-700 dark:border-rose-900/40 dark:bg-rose-950/20 dark:text-rose-400 animate-pulse'
+                : 'border-zinc-200 bg-zinc-100/50 text-zinc-700'
             }`}
             title="Time remaining before auto-wipe"
             id="session-timer-badge"
           >
-            <Clock className={`h-3.5 w-3.5 ${isLowTime ? 'text-rose-600 dark:text-rose-455' : 'text-zinc-500'}`} />
+            <Clock className={`h-3.5 w-3.5 ${isLowTime ? 'text-rose-650' : 'text-zinc-500'}`} />
             <span className="hidden lg:inline text-zinc-400 font-normal">RAM: </span>
             <span>{formatTime(sessionTimeRemaining)}</span>
           </div>
@@ -169,7 +169,7 @@ export default function Navbar({
           {/* Wipe RAM Button */}
           <button
             onClick={onWipeSession}
-            className="flex h-9 items-center gap-1.5 rounded-lg border border-rose-200/80 dark:border-rose-800/80 bg-rose-50/60 dark:bg-rose-950/20 px-3.5 text-xs font-semibold text-rose-750 dark:text-rose-300 hover:bg-rose-100/60 dark:hover:bg-rose-950/40 hover:border-rose-300/80 active:bg-rose-200 transition-all duration-300 shadow-2xs cursor-pointer"
+            className="flex h-9 items-center gap-1.5 rounded-lg border border-rose-200 bg-rose-50/60 dark:border-rose-900/40 dark:bg-rose-950/20 px-3.5 text-xs font-semibold text-rose-700 dark:text-rose-300 hover:bg-rose-100/60 dark:hover:bg-rose-900/30 hover:border-rose-300 active:scale-95 transition-all duration-300 shadow-2xs cursor-pointer"
             title="Clear all session files from browser memory"
             id="wipe-session-btn"
           >
@@ -180,7 +180,7 @@ export default function Navbar({
           {/* ⚡ PANIC BUTTON — always visible, always accessible */}
           <button
             onClick={onPanic}
-            className="flex h-9 items-center gap-1.5 rounded-lg border-2 border-red-650 bg-red-600 px-3.5 text-xs font-extrabold text-white hover:bg-red-700 hover:border-red-700 active:scale-95 transition-all duration-300 shadow-md shadow-red-500/20 hover:shadow-lg hover:shadow-red-500/35 cursor-pointer"
+            className="flex h-9 items-center gap-1.5 rounded-lg border border-red-700 bg-red-600 px-3.5 text-xs font-extrabold text-white hover:bg-red-700 hover:border-red-700 active:scale-95 transition-all duration-300 shadow-md shadow-red-500/20 hover:shadow-lg hover:shadow-red-500/35 cursor-pointer"
             title="PANIC: Instantly wipe ALL session data and return to home"
             id="panic-button"
           >
