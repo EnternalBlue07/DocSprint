@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, Eye, Sparkles, FileText, Camera, ShieldCheck, CheckSquare, Zap, ChevronRight, Image as ImageIcon, PenTool, ArrowRight, BookOpen } from 'lucide-react';
+import { Search, Eye, Sparkles, FileText, Camera, ShieldCheck, CheckSquare, Zap, ChevronRight, Image as ImageIcon, PenTool, ArrowRight, BookOpen, Layers, GraduationCap, Contact, Globe, Landmark, Sliders, Car } from 'lucide-react';
 import { ApplicationProfile } from '../types';
 import { APPLICATION_PROFILES } from '../profilesData';
 
@@ -209,24 +209,25 @@ export default function HomeView({
             />
           </div>
         </div>        {/* Categories navigation filter tabs */}
-        <div className="flex gap-1 overflow-x-auto pb-1 border-b border-zinc-100 dark:border-zinc-805">
+        <div className="flex gap-1.5 overflow-x-auto pb-2.5 border-b border-zinc-200 dark:border-zinc-800/40">
           {[
-            { id: 'all', label: 'All Profiles' },
-            { id: 'exams', label: 'Indian Exams' },
-            { id: 'government', label: 'Govt Services' },
-            { id: 'travel', label: 'Visa & Passport' },
-            { id: 'admissions', label: 'University Forms' },
-            { id: 'custom', label: 'DIY Sandbox' }
+            { id: 'all', label: 'All Profiles', icon: Layers },
+            { id: 'exams', label: 'Indian Exams', icon: GraduationCap },
+            { id: 'government', label: 'Govt Services', icon: Contact },
+            { id: 'travel', label: 'Visa & Passport', icon: Globe },
+            { id: 'admissions', label: 'University Forms', icon: Landmark },
+            { id: 'custom', label: 'DIY Sandbox', icon: Sliders }
           ].map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              className={`rounded-lg px-3.5 py-2 text-xs font-semibold whitespace-nowrap transition-all duration-300 cursor-pointer ${
+              className={`rounded-xl px-4 py-2.5 text-xs font-bold whitespace-nowrap transition-all duration-300 cursor-pointer flex items-center gap-2 border ${
                 activeTab === tab.id
-                  ? 'bg-gradient-to-r from-indigo-700 to-violet-650 text-white shadow-md shadow-indigo-500/20'
-                  : 'text-zinc-555 hover:bg-zinc-100/80 dark:hover:bg-zinc-800/40 hover:text-zinc-850 dark:hover:text-zinc-100'
+                  ? 'bg-indigo-650 text-white border-indigo-750 shadow-sm shadow-indigo-500/10'
+                  : 'text-zinc-650 dark:text-zinc-400 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 hover:bg-zinc-150/50 dark:hover:bg-zinc-800/40 hover:text-zinc-900 dark:hover:text-zinc-100'
               }`}
             >
+              <tab.icon className="h-4 w-4" />
               {tab.label}
             </button>
           ))}
@@ -240,7 +241,7 @@ export default function HomeView({
             <p className="text-[10px] text-zinc-450 mt-0.5">Try searching another query or select "DIY Sandbox" to create a custom template.</p>
           </div>
         ) : (
-          <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3" id="profiles-selector-grid">
+          <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3" id="profiles-selector-grid">
             {filteredProfiles.map((profile, idx) => {
               const isHovered = hoveredProfileId === profile.id;
               const isPrevNeighbor = hoveredIndex !== -1 && idx === hoveredIndex - 1;
@@ -258,19 +259,77 @@ export default function HomeView({
                 }
               }
 
+              // Get category-specific styling config
+              const getStyleConfig = (cat: string, id: string) => {
+                switch (cat) {
+                  case 'exams':
+                    return {
+                      icon: GraduationCap,
+                      theme: 'from-indigo-600/10 to-violet-600/5 dark:from-indigo-950/15 dark:to-zinc-200/5 hover:border-indigo-500/50',
+                      iconBg: 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400',
+                      badge: 'bg-indigo-50 dark:bg-indigo-950/20 text-indigo-700 dark:text-indigo-300 border border-indigo-100/30 dark:border-indigo-900/30'
+                    };
+                  case 'admissions':
+                    return {
+                      icon: Landmark,
+                      theme: 'from-amber-600/10 to-orange-600/5 dark:from-amber-950/15 dark:to-zinc-200/5 hover:border-amber-500/50',
+                      iconBg: 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
+                      badge: 'bg-amber-50 dark:bg-amber-950/20 text-amber-700 dark:text-amber-300 border border-amber-100/30 dark:border-amber-900/30'
+                    };
+                  case 'government':
+                    if (id === 'driving-license') {
+                      return {
+                        icon: Car,
+                        theme: 'from-rose-600/10 to-pink-600/5 dark:from-rose-950/15 dark:to-zinc-200/5 hover:border-rose-500/50',
+                        iconBg: 'bg-rose-500/10 text-rose-600 dark:text-rose-400',
+                        badge: 'bg-rose-50 dark:bg-rose-950/20 text-rose-700 dark:text-rose-300 border border-rose-100/30 dark:border-rose-900/30'
+                      };
+                    }
+                    return {
+                      icon: Contact,
+                      theme: 'from-blue-600/10 to-cyan-600/5 dark:from-blue-950/15 dark:to-zinc-200/5 hover:border-blue-500/50',
+                      iconBg: 'bg-blue-500/10 text-blue-600 dark:text-blue-400',
+                      badge: 'bg-blue-50 dark:bg-blue-950/20 text-blue-700 dark:text-blue-300 border border-blue-100/30 dark:border-blue-900/30'
+                    };
+                  case 'travel':
+                    return {
+                      icon: Globe,
+                      theme: 'from-emerald-600/10 to-teal-600/5 dark:from-emerald-950/15 dark:to-zinc-200/5 hover:border-emerald-500/50',
+                      iconBg: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
+                      badge: 'bg-emerald-50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-300 border border-emerald-100/30 dark:border-emerald-900/30'
+                    };
+                  default:
+                    return {
+                      icon: FileText,
+                      theme: 'from-zinc-100 to-zinc-50 dark:from-zinc-900 dark:to-zinc-800 hover:border-zinc-500/50',
+                      iconBg: 'bg-zinc-500/10 text-zinc-600 dark:text-zinc-400',
+                      badge: 'bg-zinc-50 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-zinc-200/30 dark:border-zinc-700/30'
+                    };
+                }
+              };
+
+              const style = getStyleConfig(profile.category, profile.id);
+
               return (
                 <div
                   key={profile.id}
                   onClick={() => onSelectProfile(profile)}
                   onMouseEnter={() => setHoveredProfileId(profile.id)}
                   onMouseLeave={() => setHoveredProfileId(null)}
-                  className={`premium-card p-5 cursor-pointer hover:border-indigo-500 hover:shadow-lg hover:shadow-indigo-500/5 flex flex-col justify-between min-h-[200px] border-b-2 hover:border-b-indigo-650 dark:hover:border-b-indigo-500 transition-all duration-300`}
+                  className={`premium-card p-5 cursor-pointer bg-gradient-to-br ${style.theme} flex flex-col justify-between min-h-[220px] border-b-2 hover:border-b-indigo-650 dark:hover:border-b-indigo-500 transition-all duration-300`}
                   style={{ transform: transformStyle }}
                 >
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <h4 className="text-sm font-extrabold text-zinc-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition font-heading">{profile.name}</h4>
-                      <span className="rounded bg-indigo-50 dark:bg-indigo-950/20 border border-indigo-100/30 px-2 py-0.5 text-[9px] font-bold font-mono text-indigo-700 dark:text-indigo-300 uppercase tracking-wider">
+                  <div className="space-y-3">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className={`p-2.5 rounded-xl ${style.iconBg} shadow-3xs shrink-0 flex items-center justify-center`}>
+                          <style.icon className="h-5 w-5" />
+                        </div>
+                        <h4 className="text-sm font-extrabold text-zinc-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition font-heading leading-snug truncate">
+                          {profile.name}
+                        </h4>
+                      </div>
+                      <span className={`rounded-lg px-2 py-0.5 text-[9px] font-extrabold font-mono uppercase tracking-wider shrink-0 ${style.badge}`}>
                         {profile.category}
                       </span>
                     </div>
@@ -279,12 +338,12 @@ export default function HomeView({
                     </p>
                   </div>
 
-                  <div className="space-y-2 mt-3 pt-3 border-t border-zinc-200/50 dark:border-zinc-800/40">
+                  <div className="space-y-2 mt-4 pt-3 border-t border-zinc-250/30 dark:border-zinc-800/40">
                     <div className="flex items-center justify-between">
-                      <span className="text-[9px] font-extrabold font-mono text-indigo-700 dark:text-indigo-400 uppercase tracking-wider group-hover:underline flex items-center gap-1 transition-all">
+                      <span className="text-[9px] font-extrabold font-mono text-indigo-700 dark:text-indigo-455 uppercase tracking-wider group-hover:underline flex items-center gap-1 transition-all">
                         Load live specs <ArrowRight className="h-3 w-3" />
                       </span>
-                      <span className="text-[10px] text-zinc-450 font-mono">
+                      <span className="text-[10px] text-zinc-450 dark:text-zinc-500 font-bold font-mono">
                         {profile.documents.length} requirements
                       </span>
                     </div>
@@ -295,7 +354,7 @@ export default function HomeView({
                           e.stopPropagation();
                           onNavigateToPlaybook();
                         }}
-                        className="w-full text-center text-[10px] font-extrabold py-2 bg-indigo-50 dark:bg-indigo-950/20 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 border border-indigo-100/30 rounded-lg text-indigo-700 dark:text-indigo-300 transition cursor-pointer"
+                        className="w-full text-center text-[10px] font-extrabold py-2 bg-indigo-50 dark:bg-indigo-950/20 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 border border-indigo-100/30 dark:border-indigo-900/30 rounded-lg text-indigo-700 dark:text-indigo-300 transition cursor-pointer"
                       >
                         View Admission Roadmap →
                       </button>
