@@ -1,0 +1,6 @@
+{
+  "name": "DocSprint",
+  "description": "A privacy-first Student Document OS with a Live Rules Engine and automated One-Click Spec Compliance.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
