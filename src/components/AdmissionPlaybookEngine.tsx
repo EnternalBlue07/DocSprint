@@ -304,8 +304,81 @@ export default function AdmissionPlaybookEngine({
         ))}
       </div>
 
-      {/* ── PLAYBOOK SELECTOR & STATE SELECTOR ROW ────────────────────────── */}
-      <div className="grid gap-6 lg:grid-cols-12">
+      {/* ── MOBILE PLAYBOOK SELECTOR (Hidden on Desktop) ── */}
+      <div className="block lg:hidden space-y-4">
+        {/* Playbook selector drop down */}
+        <div className="rounded-2xl border border-zinc-200 dark:border-zinc-805 bg-white dark:bg-zinc-900 p-5 space-y-2.5 shadow-xs">
+          <label className="text-[11px] font-bold font-mono text-zinc-450 dark:text-zinc-550 uppercase tracking-widest block">
+            Choose Admission Cycle
+          </label>
+          <div className="relative">
+            <select
+              value={selectedPlaybookId}
+              onChange={(e) => handlePlaybookSelect(e.target.value)}
+              className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-4 py-3.5 text-sm font-bold text-zinc-800 dark:text-zinc-205 focus:outline-none focus:border-indigo-500 w-full cursor-pointer shadow-xs appearance-none pr-10"
+            >
+              {filteredPlaybooksList.map((pb) => (
+                <option key={pb.id} value={pb.id}>
+                  {pb.title} ({pb.officialPortal.name})
+                </option>
+              ))}
+            </select>
+            <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-450 dark:text-zinc-500 pointer-events-none" />
+          </div>
+        </div>
+
+        {/* State/Territory picker card */}
+        <div className="rounded-2xl border border-zinc-200 dark:border-zinc-805 bg-white dark:bg-zinc-900 p-5 space-y-2.5 shadow-xs">
+          <label className="text-[11px] font-bold font-mono text-zinc-450 dark:text-zinc-550 uppercase tracking-widest block">
+            Filter State Context
+          </label>
+          <div className="relative">
+            <select
+              value={selectedState}
+              onChange={(e) => handleStateChange(e.target.value)}
+              className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-4 py-3.5 text-sm font-bold text-zinc-800 dark:text-zinc-205 focus:outline-none focus:border-indigo-500 w-full cursor-pointer shadow-xs appearance-none pr-10"
+            >
+              <option value="Maharashtra">Maharashtra (verified rules)</option>
+              <option value="National">National (JoSAA/MBA/Government cycles)</option>
+              <option value="Delhi">Delhi (Fallback)</option>
+              <option value="Karnataka">Karnataka (Fallback)</option>
+              <option value="Other">Other / Generic Lifecyle</option>
+            </select>
+            <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-450 dark:text-zinc-500 pointer-events-none" />
+          </div>
+        </div>
+
+        {/* Verified & Updated Status Widget */}
+        <div className="rounded-2xl border border-indigo-100 dark:border-indigo-950/40 bg-indigo-50/20 dark:bg-indigo-950/10 p-5 shadow-xs flex items-start gap-4">
+          <div className="p-2.5 rounded-xl bg-indigo-500/10 dark:bg-indigo-400/10 text-indigo-650 dark:text-indigo-400 shrink-0 flex items-center justify-center">
+            <ShieldCheck className="h-5 w-5" />
+          </div>
+          <div className="space-y-3 min-w-0">
+            <div>
+              <h4 className="text-xs font-bold text-zinc-900 dark:text-white flex items-center gap-1 leading-snug">
+                Verified & Updated
+                <span className="text-emerald-500 text-[8px] animate-pulse">●</span>
+              </h4>
+              <p className="text-[11px] text-zinc-500 dark:text-zinc-400 leading-normal mt-0.5 font-semibold">
+                Verified for <span className="font-extrabold text-zinc-800 dark:text-zinc-200">{selectedState}</span> state. Last updated <span className="font-extrabold text-indigo-650 dark:text-indigo-400">{getTodayFormatted()}</span>.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-1">
+              <span className="inline-flex items-center gap-1 rounded bg-indigo-50 dark:bg-indigo-950/30 px-2 py-0.5 text-[8px] font-bold font-mono text-indigo-700 dark:text-indigo-300">
+                <ShieldCheck className="h-2.5 w-2.5" />
+                Verified
+              </span>
+              <span className="inline-flex items-center gap-1 rounded bg-indigo-50 dark:bg-indigo-950/30 px-2 py-0.5 text-[8px] font-bold font-mono text-indigo-700 dark:text-indigo-300">
+                <Calendar className="h-2.5 w-2.5" />
+                Live Date
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ── DESKTOP PLAYBOOK SELECTOR (Hidden on Mobile) ── */}
+      <div className="hidden lg:grid gap-6 lg:grid-cols-12">
         {/* Left Column: Playbook picker card */}
         <div className="lg:col-span-7 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-6 space-y-4 shadow-xs flex flex-col h-[520px]">
           <label className="text-[11px] font-bold font-mono text-zinc-455 dark:text-zinc-550 uppercase tracking-widest block border-b border-zinc-100 dark:border-zinc-800/40 pb-2">
@@ -407,7 +480,7 @@ export default function AdmissionPlaybookEngine({
 
           {/* TIPS Widget */}
           <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-6 space-y-3.5 shadow-xs">
-            <h4 className="text-[11px] font-bold font-mono text-zinc-450 dark:text-zinc-550 uppercase tracking-widest flex items-center gap-1.5">
+            <h4 className="text-[11px] font-bold font-mono text-zinc-455 dark:text-zinc-555 uppercase tracking-widest flex items-center gap-1.5">
               <Sparkles className="h-4 w-4 text-amber-500" />
               TIPS
             </h4>
