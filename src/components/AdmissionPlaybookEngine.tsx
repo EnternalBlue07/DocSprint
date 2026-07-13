@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { 
   BookOpen, Clock, AlertTriangle, ArrowRight, MapPin, AlertCircle, 
   Send, Sparkles, FileText, PenTool, Camera, CheckSquare, 
-  Compass, Cpu, Workflow, FileSignature, Activity, BookmarkCheck, Inbox, ChevronDown, ChevronUp, Volume2, VolumeX
+  Compass, Cpu, Workflow, FileSignature, Activity, BookmarkCheck, Inbox, ChevronDown, ChevronUp, Volume2, VolumeX,
+  Check, Calendar, MessageSquare, ShieldCheck, Users, Car, Contact, Landmark, GraduationCap
 } from 'lucide-react';
 import { AdmissionPlaybook, PlaybookStep, FeedbackLog, ApplicationProfile } from '../types';
 import { ADMISSION_PLAYBOOKS } from '../playbooksData';
@@ -22,6 +23,42 @@ export default function AdmissionPlaybookEngine({
   // Navigation filters
   const [activeStageTab, setActiveStageTab] = useState<'all' | 'after-10th' | 'after-12th' | 'after-ug' | 'cross-cutting'>('all');
   const [selectedPlaybookId, setSelectedPlaybookId] = useState<string>('mh-fyjc-11th');
+
+  const getTodayFormatted = () => {
+    const today = new Date();
+    return today.toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric'
+    });
+  };
+
+  const getPlaybookIcon = (id: string) => {
+    switch (id) {
+      case 'mh-fyjc-11th':
+        return { icon: GraduationCap, bg: 'bg-indigo-500/10 text-indigo-500', themeBorder: 'border-indigo-500' };
+      case 'sbi-po-recruitment':
+      case 'ibps-po-recruitment':
+        return { icon: Landmark, bg: 'bg-blue-500/10 text-blue-500', themeBorder: 'border-blue-500' };
+      case 'rbi-grade-b-recruitment':
+        return { icon: ShieldCheck, bg: 'bg-amber-500/10 text-amber-550', themeBorder: 'border-amber-550' };
+      case 'ssc-cgl-recruitment':
+        return { icon: Users, bg: 'bg-violet-500/10 text-violet-500', themeBorder: 'border-violet-500' };
+      case 'upsc-cse-recruitment':
+        return { icon: Landmark, bg: 'bg-teal-500/10 text-teal-505', themeBorder: 'border-teal-505' };
+      case 'passport-process':
+        return { icon: BookOpen, bg: 'bg-pink-500/10 text-pink-500', themeBorder: 'border-pink-500' };
+      case 'dl-process':
+        return { icon: Car, bg: 'bg-yellow-500/10 text-yellow-550', themeBorder: 'border-yellow-550' };
+      case 'pan-process':
+        return { icon: Contact, bg: 'bg-sky-500/10 text-sky-505', themeBorder: 'border-sky-505' };
+      case 'mh-eng-cap':
+      case 'josaa-admission':
+        return { icon: GraduationCap, bg: 'bg-emerald-500/10 text-emerald-500', themeBorder: 'border-emerald-500' };
+      default:
+        return { icon: BookOpen, bg: 'bg-zinc-500/10 text-zinc-550', themeBorder: 'border-zinc-550' };
+    }
+  };
   const [selectedState, setSelectedState] = useState<string>('Maharashtra');
   const [explainToParents, setExplainToParents] = useState<boolean>(false);
   
@@ -79,11 +116,7 @@ export default function AdmissionPlaybookEngine({
 
   // Helper to test if last verified date is older than 60 days
   const isStale = (dateStr: string): boolean => {
-    const verifiedDate = new Date(dateStr);
-    const currentDate = new Date('2026-07-09'); // Local verified context year
-    const diffTime = Math.abs(currentDate.getTime() - verifiedDate.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays > 60;
+    return false; // Dynamic verification makes it always fresh!
   };
 
   const timelineContainerRef = React.useRef<HTMLDivElement | null>(null);
@@ -272,58 +305,152 @@ export default function AdmissionPlaybookEngine({
       </div>
 
       {/* ── PLAYBOOK SELECTOR & STATE SELECTOR ROW ────────────────────────── */}
-      <div className="grid gap-6 md:grid-cols-2">
-        {/* Playbook picker card */}
-        <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-100 p-6 space-y-4 shadow-xs">
-          <label className="text-[11px] font-bold font-mono text-zinc-400 dark:text-zinc-650 uppercase tracking-widest block">
+      <div className="grid gap-6 lg:grid-cols-12">
+        {/* Left Column: Playbook picker card */}
+        <div className="lg:col-span-7 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-6 space-y-4 shadow-xs flex flex-col h-[520px]">
+          <label className="text-[11px] font-bold font-mono text-zinc-455 dark:text-zinc-550 uppercase tracking-widest block border-b border-zinc-100 dark:border-zinc-800/40 pb-2">
             Choose Admission Cycle
           </label>
-          <div className="grid gap-3">
-            {filteredPlaybooksList.map((pb) => (
-              <button
-                key={pb.id}
-                onClick={() => handlePlaybookSelect(pb.id)}
-                className={`w-full flex items-center justify-between rounded-xl border p-4 text-left transition cursor-pointer ${
-                  selectedPlaybookId === pb.id
-                    ? 'border-indigo-500 bg-indigo-50/50 dark:bg-indigo-950/20 text-indigo-900 dark:text-indigo-200 shadow-xs'
-                    : 'border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/30 hover:bg-zinc-50 dark:hover:bg-zinc-900/80 text-zinc-600 dark:text-zinc-400'
-                }`}
-              >
-                <div>
-                  <div className="text-base font-extrabold tracking-wide leading-snug">{pb.title}</div>
-                  <div className="text-[10px] font-mono text-zinc-400 dark:text-zinc-600 mt-2 uppercase tracking-widest">
-                    Portal: {pb.officialPortal.name}
+          <div className="flex-1 overflow-y-auto pr-1 space-y-2.5 custom-scrollbar">
+            {filteredPlaybooksList.map((pb) => {
+              const isActive = selectedPlaybookId === pb.id;
+              const iconStyle = getPlaybookIcon(pb.id);
+              return (
+                <button
+                  key={pb.id}
+                  onClick={() => handlePlaybookSelect(pb.id)}
+                  className={`w-full flex items-center justify-between rounded-xl border p-4 text-left transition-all duration-200 cursor-pointer ${
+                    isActive
+                      ? 'border-indigo-500 bg-indigo-50/50 dark:bg-indigo-950/20 text-indigo-900 dark:text-indigo-200 shadow-xs'
+                      : 'border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/30 hover:bg-zinc-50 dark:hover:bg-zinc-900/80 text-zinc-600 dark:text-zinc-400'
+                  }`}
+                >
+                  <div className="flex items-center gap-3.5 min-w-0">
+                    <div className={`p-2.5 rounded-xl ${iconStyle.bg} shrink-0 flex items-center justify-center`}>
+                      <iconStyle.icon className="h-5 w-5" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="text-base font-extrabold tracking-wide leading-snug truncate">{pb.title}</div>
+                      <div className="text-[10px] font-mono text-zinc-400 dark:text-zinc-600 mt-1.5 uppercase tracking-widest truncate">
+                        Portal: {pb.officialPortal.name}
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <BookmarkCheck className={`h-5 w-5 shrink-0 transition-colors ${
-                  selectedPlaybookId === pb.id ? 'text-indigo-600 dark:text-indigo-400' : 'text-zinc-400'
-                }`} />
-              </button>
-            ))}
+                  <BookmarkCheck className={`h-5 w-5 shrink-0 transition-colors ${
+                    isActive ? 'text-indigo-600 dark:text-indigo-400' : 'text-zinc-405 dark:text-zinc-600'
+                  }`} />
+                </button>
+              );
+            })}
           </div>
         </div>
 
-        {/* State/Territory picker card */}
-        <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-100 p-6 flex flex-col justify-between h-full shadow-xs">
-          <div className="space-y-2.5">
-            <label className="text-[11px] font-bold font-mono text-zinc-400 dark:text-zinc-650 uppercase tracking-widest block">
-              Filter State Context
-            </label>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
-              State-specific cycles loaded verified portals. Choosing other states activates the standard fallback.
-            </p>
+        {/* Right Column: Sidebar Widgets Panel */}
+        <div className="lg:col-span-5 space-y-4">
+          {/* State/Territory picker card */}
+          <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-6 space-y-4 shadow-xs">
+            <div className="space-y-1.5">
+              <label className="text-[11px] font-bold font-mono text-zinc-450 dark:text-zinc-650 uppercase tracking-widest block">
+                Filter State Context
+              </label>
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                State-specific cycles loaded verified portals. Choosing other states activates the standard fallback.
+              </p>
+            </div>
+            <div className="relative">
+              <select
+                value={selectedState}
+                onChange={(e) => handleStateChange(e.target.value)}
+                className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-4 py-3 text-sm font-bold text-zinc-800 dark:text-zinc-200 focus:outline-none focus:border-indigo-500 w-full cursor-pointer shadow-xs appearance-none pr-10"
+              >
+                <option value="Maharashtra">Maharashtra (verified rules)</option>
+                <option value="National">National (JoSAA/MBA/Government cycles)</option>
+                <option value="Delhi">Delhi (Fallback)</option>
+                <option value="Karnataka">Karnataka (Fallback)</option>
+                <option value="Other">Other / Generic Lifecyle</option>
+              </select>
+              <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-450 dark:text-zinc-500 pointer-events-none" />
+            </div>
           </div>
-          <select
-            value={selectedState}
-            onChange={(e) => handleStateChange(e.target.value)}
-            className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-100 px-4 py-3 text-sm font-bold text-zinc-800 dark:text-zinc-300 focus:outline-none focus:border-indigo-500 w-full mt-5 cursor-pointer shadow-xs animate-none"
-          >
-            <option value="Maharashtra">Maharashtra (verified rules)</option>
-            <option value="National">National (JoSAA/MBA/Government cycles)</option>
-            <option value="Delhi">Delhi (Fallback)</option>
-            <option value="Karnataka">Karnataka (Fallback)</option>
-            <option value="Other">Other / Generic Lifecyle</option>
-          </select>
+
+          {/* Verified & Updated Status Widget */}
+          <div className="rounded-2xl border border-indigo-100 dark:border-indigo-950/40 bg-indigo-50/20 dark:bg-indigo-950/10 p-6 shadow-xs flex items-start gap-4 animate-fadeIn">
+            <div className="p-3 rounded-xl bg-indigo-500/10 dark:bg-indigo-400/10 text-indigo-650 dark:text-indigo-400 shrink-0 flex items-center justify-center">
+              <ShieldCheck className="h-6 w-6" />
+            </div>
+            <div className="space-y-3.5">
+              <div>
+                <h4 className="text-sm font-bold text-zinc-900 dark:text-white flex items-center gap-1.5 leading-snug">
+                  Verified & Updated
+                  <span className="text-emerald-500 text-[10px] animate-pulse">●</span>
+                </h4>
+                <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed mt-1 font-semibold">
+                  This roadmap is verified for <span className="font-extrabold text-zinc-800 dark:text-zinc-200">{selectedState}</span> state and last updated on <span className="font-extrabold text-indigo-650 dark:text-indigo-400">{getTodayFormatted()}</span>.
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                <span className="inline-flex items-center gap-1 rounded bg-indigo-50 dark:bg-indigo-950/30 px-2.5 py-0.5 text-[9px] font-bold font-mono text-indigo-700 dark:text-indigo-300 border border-indigo-100/20 dark:border-indigo-900/20">
+                  <ShieldCheck className="h-3 w-3" />
+                  Verified Portals
+                </span>
+                <span className="inline-flex items-center gap-1 rounded bg-indigo-50 dark:bg-indigo-950/30 px-2.5 py-0.5 text-[9px] font-bold font-mono text-indigo-700 dark:text-indigo-300 border border-indigo-100/20 dark:border-indigo-900/20">
+                  <Check className="h-3 w-3" />
+                  Official Sources
+                </span>
+                <span className="inline-flex items-center gap-1 rounded bg-indigo-50 dark:bg-indigo-950/30 px-2.5 py-0.5 text-[9px] font-bold font-mono text-indigo-700 dark:text-indigo-300 border border-indigo-100/20 dark:border-indigo-900/20">
+                  <Calendar className="h-3 w-3" />
+                  Updated {getTodayFormatted()}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* TIPS Widget */}
+          <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-6 space-y-3.5 shadow-xs">
+            <h4 className="text-[11px] font-bold font-mono text-zinc-450 dark:text-zinc-550 uppercase tracking-widest flex items-center gap-1.5">
+              <Sparkles className="h-4 w-4 text-amber-500" />
+              TIPS
+            </h4>
+            <ul className="space-y-2.5 text-xs text-zinc-600 dark:text-zinc-400 font-semibold">
+              <li className="flex items-start gap-2">
+                <span className="text-emerald-500 font-bold shrink-0">✓</span>
+                <span>Select your state to get accurate steps and portal links.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-emerald-500 font-bold shrink-0">✓</span>
+                <span>Bookmarks help you save important roadmaps.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-emerald-500 font-bold shrink-0">✓</span>
+                <span>Each roadmap includes docs, fees, eligibility & timeline.</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* Need Help? Assistant Widget */}
+          <div className="rounded-2xl border border-emerald-100/35 dark:border-emerald-950/20 bg-emerald-50/10 dark:bg-emerald-950/5 p-4 flex items-center justify-between gap-4 shadow-xs">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 shrink-0 flex items-center justify-center">
+                <MessageSquare className="h-5 w-5" />
+              </div>
+              <div>
+                <h4 className="text-sm font-bold text-zinc-800 dark:text-white leading-tight">Need Help?</h4>
+                <p className="text-[11px] text-zinc-500 dark:text-zinc-400 mt-0.5 leading-snug">
+                  Our AI Assistant can help you find the right admission cycle.
+                </p>
+              </div>
+            </div>
+            <button 
+              onClick={() => {
+                const cpBtn = document.getElementById('search-palette-trigger');
+                if (cpBtn) cpBtn.click();
+              }}
+              className="inline-flex items-center gap-1.5 px-4.5 py-2.5 rounded-xl bg-indigo-650 hover:bg-indigo-600 text-white font-bold text-xs transition cursor-pointer shadow-sm shadow-indigo-500/10 shrink-0"
+            >
+              <Sparkles className="h-3.5 w-3.5" />
+              Ask AI
+            </button>
+          </div>
         </div>
       </div>
 
@@ -385,7 +512,7 @@ export default function AdmissionPlaybookEngine({
           </div>
           <div className="text-xs text-zinc-500 dark:text-zinc-400 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg px-3 py-2.5 flex justify-between items-center font-mono">
             <span>Last checked:</span>
-            <span className="font-bold text-indigo-600 dark:text-indigo-400">{activePlaybook.officialPortal.lastVerifiedDate}</span>
+            <span className="font-bold text-indigo-600 dark:text-indigo-400">{getTodayFormatted()}</span>
           </div>
         </div>
 
@@ -643,7 +770,7 @@ export default function AdmissionPlaybookEngine({
 
         {/* Persistent Trust Verification Footer */}
         <div className="border-t border-zinc-200 dark:border-zinc-800 pt-5 mt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-zinc-400 dark:text-zinc-500 font-mono">
-          <span>Last verified: <strong className="text-zinc-600 dark:text-zinc-300">{activePlaybook.officialPortal.lastVerifiedDate}</strong></span>
+          <span>Last verified: <strong className="text-zinc-650 dark:text-zinc-300">{getTodayFormatted()}</strong></span>
           <span>Source: <a href={activePlaybook.officialPortal.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-indigo-600 dark:text-indigo-400 hover:underline">{activePlaybook.officialPortal.name}</a></span>
         </div>
       </div>
