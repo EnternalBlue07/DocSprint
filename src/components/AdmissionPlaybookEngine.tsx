@@ -542,18 +542,18 @@ export default function AdmissionPlaybookEngine({
                   {isExpanded && (
                     <div className="px-5 pb-5 pt-1 border-t border-zinc-100 dark:border-zinc-805 space-y-5 animate-slideDown">
                       {/* Mobile timing pill fallback */}
-                      <div className="flex sm:hidden justify-between items-center bg-zinc-50 dark:bg-zinc-900 p-2.5 rounded-lg border border-zinc-200 dark:border-zinc-800 font-mono text-[10px] font-bold">
+                      <div className="flex sm:hidden justify-between items-center bg-zinc-50/50 dark:bg-zinc-200/10 p-2.5 rounded-lg border border-zinc-200 dark:border-zinc-300/20 font-mono text-[10px] font-bold">
                         <span className="text-zinc-400">Timing window:</span>
-                        <span className="text-zinc-700 dark:text-zinc-350">{step.timingWindow}</span>
+                        <span className="text-zinc-700 dark:text-zinc-300">{step.timingWindow}</span>
                       </div>
 
-                      <p className="text-sm text-zinc-650 dark:text-zinc-350 leading-relaxed font-medium">
+                      <p className="text-sm text-zinc-650 dark:text-zinc-300 leading-relaxed font-medium">
                         {step.description}
                       </p>
 
                       {/* 🧠 Preparation & Study Guide */}
                       {step.studyGuide && (
-                        <div className="bg-zinc-50/80 dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 space-y-3 shadow-3xs">
+                        <div className="bg-gradient-to-r from-indigo-50/60 to-zinc-50/40 dark:from-indigo-950/15 dark:to-zinc-200/10 border border-indigo-100 dark:border-indigo-900/40 rounded-xl p-4 space-y-3 shadow-3xs">
                           <span className="text-[10px] font-bold font-mono text-indigo-650 dark:text-indigo-400 uppercase tracking-widest block flex items-center gap-1.5">
                             <Sparkles className="h-3.5 w-3.5 text-indigo-500" />
                             Preparation & Study Guide (Syllabus & Free Resources)
@@ -561,8 +561,8 @@ export default function AdmissionPlaybookEngine({
                           
                           {step.studyGuide.syllabus && step.studyGuide.syllabus.length > 0 && (
                             <div className="space-y-1">
-                              <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-600 uppercase font-mono">Exam Syllabus & Pattern:</span>
-                              <ul className="list-disc pl-5 text-xs text-zinc-650 dark:text-zinc-400 space-y-1 font-semibold">
+                              <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase font-mono">Exam Syllabus & Pattern:</span>
+                              <ul className="list-disc pl-5 text-xs text-zinc-650 dark:text-zinc-300 space-y-1 font-semibold">
                                 {step.studyGuide.syllabus.map((syl, i) => (
                                   <li key={i} className="leading-relaxed">{syl}</li>
                                 ))}
@@ -571,9 +571,9 @@ export default function AdmissionPlaybookEngine({
                           )}
 
                           {step.studyGuide.resources && step.studyGuide.resources.length > 0 && (
-                            <div className="space-y-1 pt-2 border-t border-zinc-200 dark:border-zinc-800">
-                              <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-600 uppercase font-mono">Recommended Material:</span>
-                              <ul className="list-disc pl-5 text-xs text-zinc-650 dark:text-zinc-400 space-y-1 font-semibold">
+                            <div className="space-y-1 pt-2 border-t border-indigo-100 dark:border-indigo-900/20">
+                              <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase font-mono">Recommended Material:</span>
+                              <ul className="list-disc pl-5 text-xs text-zinc-650 dark:text-zinc-300 space-y-1 font-semibold">
                                 {step.studyGuide.resources.map((res, i) => (
                                   <li key={i} className="leading-relaxed">{res}</li>
                                 ))}
@@ -585,18 +585,18 @@ export default function AdmissionPlaybookEngine({
 
                       {/* Documents list */}
                       {step.documentsNeeded.length > 0 && (
-                        <div className="bg-zinc-50/80 dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 space-y-3 shadow-3xs">
-                          <span className="text-[10px] font-bold font-mono text-zinc-400 dark:text-zinc-650 uppercase tracking-widest block flex items-center gap-1.5">
-                            <Inbox className="h-3.5 w-3.5 text-zinc-400" />
+                        <div className="bg-gradient-to-r from-violet-50/60 to-zinc-50/40 dark:from-violet-950/15 dark:to-zinc-200/10 border border-violet-100 dark:border-violet-900/40 rounded-xl p-4 space-y-3 shadow-3xs">
+                          <span className="text-[10px] font-bold font-mono text-violet-650 dark:text-violet-400 uppercase tracking-widest block flex items-center gap-1.5">
+                            <Inbox className="h-3.5 w-3.5 text-violet-500" />
                             Required Documents at this step
                           </span>
-                          <div className="divide-y divide-zinc-200 dark:divide-zinc-800">
+                          <div className="divide-y divide-zinc-200 dark:divide-zinc-800/40">
                             {step.documentsNeeded.map((doc, idx) => (
                               <div key={idx} className="flex items-center justify-between py-3 first:pt-0 last:pb-0 gap-4">
                                 <div>
                                   <span className="text-sm text-zinc-800 dark:text-white font-extrabold">{doc.name}</span>
                                   <div className="flex items-center gap-1.5 mt-1">
-                                    <span className="text-[10px] font-mono text-zinc-450 dark:text-zinc-500 uppercase font-bold">
+                                    <span className="text-[10px] font-mono text-zinc-450 dark:text-zinc-400 uppercase font-bold">
                                       {doc.originalOrPhotocopy === 'both' ? 'Original & Photocopy' : doc.originalOrPhotocopy}
                                     </span>
                                     {doc.printCopies && (
@@ -610,10 +610,10 @@ export default function AdmissionPlaybookEngine({
                                 {doc.docSprintStudio && (
                                   <button
                                     onClick={() => handleDeepLink(doc)}
-                                    className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 flex items-center gap-1.5 shrink-0 cursor-pointer"
+                                    className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 flex items-center gap-1.5 shrink-0 cursor-pointer animate-pulse hover:animate-none"
                                   >
                                     {getStudioIcon(doc.docSprintStudio)}
-                                    Prepare Now <ArrowRight className="h-3.5 w-3.5 animate-pulse" />
+                                    Prepare Now <ArrowRight className="h-3.5 w-3.5" />
                                   </button>
                                 )}
                               </div>
@@ -624,8 +624,8 @@ export default function AdmissionPlaybookEngine({
 
                       {/* Tips */}
                       {step.tips.length > 0 && (
-                        <div className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 space-y-1.5 bg-zinc-50/50 dark:bg-zinc-900/20 p-4 rounded-xl border border-zinc-200/80 dark:border-zinc-800">
-                          <span className="font-extrabold text-zinc-400 dark:text-zinc-600 font-mono block">PRO TIPS:</span>
+                        <div className="text-xs sm:text-sm text-zinc-650 dark:text-zinc-300 space-y-1.5 bg-gradient-to-r from-amber-50/30 to-zinc-50/20 dark:from-amber-950/10 dark:to-zinc-200/5 p-4 rounded-xl border border-amber-100 dark:border-amber-900/20 shadow-3xs">
+                          <span className="font-extrabold text-amber-700 dark:text-amber-400 font-mono block">PRO TIPS:</span>
                           <ul className="list-disc pl-5 space-y-1">
                             {step.tips.map((t, i) => (
                               <li key={i} className="leading-relaxed">{t}</li>
