@@ -27,7 +27,7 @@ export default function ToastContainer({ toasts, onRemove }: ToastContainerProps
   );
 }
 
-function ToastCard({ toast, onRemove }: { toast: ToastMessage; onRemove: (id: string) => void }) {
+function ToastCard({ toast, onRemove }: { toast: ToastMessage; onRemove: (id: string) => void; key?: string }) {
   const [expanded, setExpanded] = useState(false);
 
   // Auto remove after 5.5 seconds (gives time for slide up and reading)

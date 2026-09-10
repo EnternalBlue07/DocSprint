@@ -291,7 +291,7 @@ export default function VaultManager({
             </h4>
             {vaultContent?.files && Object.keys(vaultContent.files).length > 0 ? (
               <div className="max-h-28 overflow-y-auto border border-zinc-200 dark:border-zinc-800 rounded-lg p-2 divide-y divide-zinc-100 dark:divide-zinc-805 text-xs">
-                {Object.values(vaultContent.files).map((f) => (
+                {Object.values(vaultContent.files).map((f: any) => (
                   <div key={f.id} className="py-1.5 flex justify-between items-center">
                     <span className="font-semibold text-zinc-700 dark:text-zinc-300 truncate max-w-[200px]">{f.name}</span>
                     <span className="text-[10px] text-zinc-450 font-mono">{(f.size / 1024).toFixed(0)} KB</span>
